@@ -95,9 +95,15 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover {
+nav a{
+	text-decoration: none;
+	color: black;
+}
+
+nav a:hover{
 	color: #B1663C;
 }
+
 #introduction {
 	display: flex;
 	align-items: center;
