@@ -8,16 +8,6 @@ function recupWorks(){
     .catch(error => console.error('Erreur lors de la récupération des projets:', error));
 }
 
-function recupCategory(){
-    fetch("http://localhost:5678/api/categories")
-    .then(reponse => reponse.json())
-    .then(categories =>{
-        console.log(categories);
-        addFilter(categories)
-    })
-    .catch(error => console.error('Erreur lors de la récupération des projets:', error));
-}
-
 function addWorks(projects){
     const gallery = document.querySelector(".gallery");
     
@@ -39,29 +29,4 @@ function addWorks(projects){
     })
 }
 
-function addFilter(categories){
-    categories.unshift({id : 4, name : "Tous"});
-    console.log(categories);
-
-    const filters = document.querySelector(".filters");
-
-    categories.forEach(buttonFilter => {
-        const filterContainer = document.createElement("div");
-        filterContainer.classList.add("filterContainer");
-
-        const filterCategory = document.createElement("h3");
-        filterCategory.textContent = buttonFilter.name;
-        filterCategory.classList.add("filterTitle");
-        filterContainer.appendChild(filterCategory);
-
-        filters.appendChild(filterContainer);
-
-        filterContainer.addEventListener('click', () => {
-            filterContainer.classList.toggle('active');
-            console.log("Vous avez appuyé sur un bouton filtre");
-        });        
-    });
-}
-
 recupWorks();
-recupCategory();
