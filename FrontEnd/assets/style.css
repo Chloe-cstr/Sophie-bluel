@@ -154,6 +154,13 @@ nav a:hover{
 	cursor: pointer;
 }
 
+.filterContainer.active .filterTitle{
+	background-color: #1D6154;
+	color: white;
+	cursor: pointer;
+	border-radius: 50px;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;

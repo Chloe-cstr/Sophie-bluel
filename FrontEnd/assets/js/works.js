@@ -4,7 +4,16 @@ function recupWorks(){
     .then(projects =>{
         console.log(projects);
         addWorks(projects);
-        addFilters(projects)
+    })
+    .catch(error => console.error('Erreur lors de la récupération des projets:', error));
+}
+
+function recupCategory(){
+    fetch("http://localhost:5678/api/categories")
+    .then(reponse => reponse.json())
+    .then(categories =>{
+        console.log(categories);
+        addFilter(categories)
     })
     .catch(error => console.error('Erreur lors de la récupération des projets:', error));
 }
@@ -30,30 +39,29 @@ function addWorks(projects){
     })
 }
 
-function addFilters(projects){
-    const gallery = document.querySelector(".gallery");
+function addFilter(categories){
+    categories.unshift({id : 4, name : "Tous"});
+    console.log(categories);
+
     const filters = document.querySelector(".filters");
 
-    //Récupère les id
-    const idCategory = new Set(projects.map(id=>id.category.id));
-    console.log(idCategory);
-
-    //Récupère les names
-    const nameCategory = new Set(projects.map(name=>name.category.name));
-    console.log(nameCategory);
-
-    //Créer les boutons
-    nameCategory.forEach(buttonFilter=>{
+    categories.forEach(buttonFilter => {
         const filterContainer = document.createElement("div");
         filterContainer.classList.add("filterContainer");
-    
-        const filter = document.createElement("h3");
-        filter.textContent = buttonFilter;
-        filter.classList.add("filterTitle");
-        filterContainer.appendChild(filter);
+
+        const filterCategory = document.createElement("h3");
+        filterCategory.textContent = buttonFilter.name;
+        filterCategory.classList.add("filterTitle");
+        filterContainer.appendChild(filterCategory);
 
         filters.appendChild(filterContainer);
-    })
+
+        filterContainer.addEventListener('click', () => {
+            filterContainer.classList.toggle('active');
+            console.log("Vous avez appuyé sur un bouton filtre");
+        });        
+    });
 }
 
-recupWorks()
+recupWorks();
+recupCategory();
