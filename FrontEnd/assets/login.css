@@ -12,6 +12,14 @@
     text-align: center;
 }
 
+.error{
+    color: #B1663C;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
 form{
     display: flex;
     flex-direction: column;
@@ -36,4 +44,8 @@ input[type="submit"]{
 
 .forgot-password a{
     color: #3D3D3D;
+}
+
+.footer{
+    margin-top: 100px;
 }
