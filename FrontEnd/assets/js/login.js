@@ -27,6 +27,8 @@ function recupLogin(email, password){
     .then(data => {
         console.log(data); // Afficher la réponse pour voir la structure
         if (data.token) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('modeEdition', 'true'); // Mode édition activé
             window.location.href = 'index.html'; // Redirection en cas de succès
         } 
     })
