@@ -45,13 +45,40 @@
 		<h2>Mes Projets</h2>
 		<div class="modal" style="display: none;">
 			<div class="modal-content">
-				<i class="fa-solid fa-xmark icon-close"></i>
+				<i class="fa-solid fa-xmark icon-close" id="icon-close"></i>
 				<h3>Galerie photo</h3>
 				<div class="gallery-project">
 					<!--Ajout dynamiquement des projects-->
 				</div>
 				<div class="line"></div>
 				<a href="#" class="cta">Ajouter une photo</a>
+			</div>
+		</div>
+		<div class="modal"  style="display: none;">
+			<div class="modal-content">
+				<div class="icon">
+					<i class="fa-solid fa-arrow-left icon-return"></i>
+					<i class="fa-solid fa-xmark" id="icon-close"></i>
+				</div>
+				<h3>Ajout photo</h3>
+				<div class="upload-section">
+					<div class="upload-placeholder">
+						<i class="fa-regular fa-image"></i>
+						<p class="upload-text">+ Ajouter photo</p>
+						<span class="upload-span">jpg, png : 4mo max</span>
+					</div>
+				</div>
+				<div class="form-section">
+					<label for="photo-title">Titre</label>
+					<input type="text" id="photo-title">
+					
+					<label for="photo-category">Catégorie</label>
+					<select id="photo-category">
+						<!-- Options de catégorie ajoutées dynamiquement -->
+					</select>
+				</div>
+				<div class="line"></div>
+				<a href="#" class="cta-bis">Valider</a>
 			</div>
 		</div>
 		<div class="filters">

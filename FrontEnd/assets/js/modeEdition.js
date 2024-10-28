@@ -59,7 +59,7 @@ function openModal(modifText){
 }
 
 function closeModal(){
-    const iconClose = document.querySelector(".icon-close");
+    const iconClose = document.getElementById("icon-close");
     const modal = document.querySelector(".modal");
     iconClose.addEventListener('click', ()=>{
         modal.style.display = "none";
