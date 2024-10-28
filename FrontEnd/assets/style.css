@@ -189,8 +189,25 @@ nav a:hover{
 	grid-row-gap: 20px;
 }
 
+.figureModal{
+	position: relative;
+	display: inline-block;
+}
+
 .imgModal{
 	width: 100%;
+}
+
+.delete-icon{
+	position: absolute;
+	top: 5px;
+    right: 5px;
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
 }
 
 .line{
