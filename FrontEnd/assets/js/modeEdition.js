@@ -43,8 +43,53 @@ function addModeEdition(){
             modifText.classList.add("modifText")
             modifText.innerText = "modifier";
             titleContainer.appendChild(modifText);
+
+            openModal(modifText);
+            closeModal();
+            recupGallery();
         }
     })
 }
 
-addModeEdition()
+function openModal(modifText){
+    const modal = document.querySelector(".modal");
+    modifText.addEventListener('click', ()=>{
+        modal.style.display = "flex";
+    })
+}
+
+function closeModal(){
+    const iconClose = document.querySelector(".icon-close");
+    const modal = document.querySelector(".modal");
+    iconClose.addEventListener('click', ()=>{
+        modal.style.display = "none";
+    })
+}
+
+function recupGallery(){
+    fetch("http://localhost:5678/api/works")
+    .then(reponse => reponse.json())
+    .then(projects =>{
+        console.log(projects);
+        addGalery(projects);
+    })
+    .catch(error => console.error('Erreur lors de la récupération des projets:', error));
+}
+
+function addGalery(projects){
+    const galleryProject = document.querySelector(".gallery-project");
+
+    projects.forEach(work =>{
+        const project = document.createElement("figure");
+
+        const imgProject = document.createElement("img");
+        imgProject.classList.add("imgModal")
+        imgProject.src = work.imageUrl;
+        imgProject.alt = work.title;
+        project.appendChild(imgProject);
+
+        galleryProject.appendChild(project);
+    })
+}
+
+addModeEdition();
