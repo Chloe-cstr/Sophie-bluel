@@ -46,6 +46,8 @@ function addModeEdition(){
 
             openModal(modifText);
             closeModal();
+            goModalForm();
+            returnModal();
             recupGallery();
         }
     })
@@ -59,16 +61,40 @@ function openModal(modifText){
 }
 
 function closeModal(){
-    const iconClose = document.getElementById("icon-close");
-    const modal = document.querySelector(".modal");
-    iconClose.addEventListener('click', ()=>{
-        modal.style.display = "none";
+    const iconClose = document.querySelectorAll(".icon-close");
+    const modal = document.querySelectorAll(".modal");
+    iconClose.forEach((icon, index)=>{
+        icon.addEventListener('click', ()=>{
+            modal[index].style.display = "none";
+        })
     })
     window.addEventListener("click", (event) => {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
+        modal.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
     });
+}
+
+function goModalForm(){
+    const buttonCta = document.querySelector(".cta");
+    const modalGallery = document.getElementById("modal-gallery");
+    const modalForm = document.getElementById("modal-form");
+    buttonCta.addEventListener('click', ()=>{
+        modalGallery.style.display = "none";
+        modalForm.style.display = "flex";
+    })
+}
+
+function returnModal(){
+    const iconReturn = document.querySelector(".icon-return");
+    const modalGallery = document.getElementById("modal-gallery");
+    const modalForm = document.getElementById("modal-form");
+    iconReturn.addEventListener('click', ()=>{
+        modalGallery.style.display = "flex";
+        modalForm.style.display = "none";
+    })
 }
 
 function recupGallery(){
