@@ -49,6 +49,9 @@ function addModeEdition(){
             goModalForm();
             returnModal();
             recupGallery();
+            addPhoto();
+            addCategories();
+            sendForm();
         }
     })
 }
@@ -163,6 +166,110 @@ function deleteProject(deleteIcon, projectId, project){
         })
         .catch(error => console.error("Erreur réseau :", error));
     });
+}
+
+function addPhoto(){
+    const uploadPlaceholder = document.querySelector('.upload-placeholder');
+    const fileInput = document.getElementById('fileInput');
+    const iconImg = document.getElementById('icon-img');
+    uploadPlaceholder.addEventListener('click', () => {
+        // Déclencher le clic sur le champ de fichier
+        fileInput.click();
+      });
+      fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+        // Utiliser FileReader pour lire le fichier image
+        const reader = new FileReader();
+        reader.onload = (e) => {
+        // Remplacer l'icône par l'image sélectionnée
+        iconImg.style.display = 'none'; // Masquer l'icône
+        const img = document.createElement('img');
+        img.classList.add("newImg")
+        img.src = e.target.result;
+        // Remplacer l'icône par l'image
+        uploadPlaceholder.replaceChild(img, iconImg);
+        };
+        reader.readAsDataURL(file);
+        }
+    });      
+}
+
+function addCategories(){
+    fetch('http://localhost:5678/api/categories')
+        .then(reponse => reponse.json())
+        .then(categories =>{
+            console.log(categories);
+            loadCategories(categories);
+        })
+        .catch(error => console.error("Error :", error))
+}
+
+function loadCategories(categories){
+    const categorySelect = document.getElementById('photo-category');
+    categories.forEach(category =>{
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        categorySelect.appendChild(option);
+    })
+}
+
+async function sendForm(){
+    const buttonValid = document.querySelector(".cta-bis");
+    buttonValid.addEventListener('click', async () =>{
+        const fileInput = document.getElementById("fileInput");
+        const title = document.getElementById("photo-title").value;
+        const category = document.getElementById("photo-category").value;
+
+        // Créer un objet FormData pour l'envoi
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+        formData.append('title', title);
+        formData.append('category', category);
+
+        // Envoyer la requête POST
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch('http://localhost:5678/api/works', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                // Fermer la modale et actualiser les données si nécessaire
+                document.getElementById('modal-form').style.display = 'none';
+                const newProject = await response.json();
+                addProjectToIndex(newProject);
+            } else {
+                alert("Erreur lors de l'ajout du projet.");
+            }
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert("Erreur de connexion.");
+        }
+    })
+}
+
+function addProjectToIndex(newProject){
+    const gallery = document.querySelector(".gallery");
+
+    const project = document.createElement("figure");
+        
+    const imageProject = document.createElement("img");
+    imageProject.src = newProject.imageUrl;
+    imageProject.alt = newProject.title;
+    project.appendChild(imageProject); //Ajout de l'image à la balise figure
+        
+    const titleProject = document.createElement("figcaption");
+    titleProject.textContent = newProject.title;
+    project.appendChild(titleProject); //Ajout du titre à la balise figure
+
+    gallery.appendChild(project); //Ajout de la balise figure à la div .gallery
 }
 
 addModeEdition();

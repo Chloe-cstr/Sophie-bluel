@@ -253,10 +253,12 @@ nav a:hover{
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	align-items: center;
 	gap: 10px;
 	text-align: center;
 	background-color: #E8F1F6;
 	border-radius: 5px;
+	position: relative;
 }
 
 .fa-image{
@@ -264,11 +266,18 @@ nav a:hover{
 	color: #CBD6DC;
 }
 
+.newImg{
+    width: 60px;
+	height: auto;
+    object-fit: cover;
+}
+
 .upload-text{
 	padding: 10px 35px;
 	border-radius: 50px;
 	background-color: #CBD6DC;
 	color: #306685;
+	cursor: pointer;
 }
 
 .form-section{
