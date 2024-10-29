@@ -1,11 +1,12 @@
 function addModeEdition(){
     document.addEventListener('DOMContentLoaded', ()=>{
-        const modeEdition = localStorage.getItem('modeEdition')
+        const modeEdition = localStorage.getItem('modeEdition');
         if (modeEdition === "true"){
             console.log("mode édition activé");
 
             //Ajout de la bannière
             const editBanner = document.querySelector(".banner");
+            editBanner.style.display = "flex";
 
             const iconBanner = document.createElement("i");
             iconBanner.classList.add("fa-regular", "fa-pen-to-square");
@@ -16,9 +17,17 @@ function addModeEdition(){
             textBanner.innerText = "Mode édition";
             editBanner.appendChild(textBanner);
 
+            const headerSpace = document.querySelector(".header");
+            headerSpace.style.marginTop = "90px";
+
             //Remplacer login par logout
             const logout = document.querySelector(".login");
             logout.innerText = "logout";
+            logout.addEventListener('click', () => {
+                // Déconnexion et retour au mode normal
+                localStorage.removeItem("modeEdition");
+                location.reload();
+            });
             
             //Supprimer le trie
             const filters = document.querySelector(".filters");

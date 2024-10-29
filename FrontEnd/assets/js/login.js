@@ -35,6 +35,8 @@ function recupLogin(email, password){
     .catch(error => {
         const errorElement = document.querySelector(".error");
 
+        errorElement.innerHTML = '';
+
         const errorIcon = document.createElement("i");
         errorIcon.classList.add("fa-solid", "fa-triangle-exclamation");
         errorElement.appendChild(errorIcon);
