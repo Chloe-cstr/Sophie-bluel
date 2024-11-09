@@ -251,7 +251,6 @@ nav a:hover{
 }
 
 .upload-placeholder{
-	padding: 25px 100px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -261,6 +260,8 @@ nav a:hover{
 	background-color: #E8F1F6;
 	border-radius: 5px;
 	position: relative;
+	height: 180px;
+	width: 380px;
 }
 
 .fa-image{
@@ -269,8 +270,8 @@ nav a:hover{
 }
 
 .newImg{
-    width: 60px;
-	height: auto;
+    width: auto;
+	height: 100%;
     object-fit: cover;
 }
 
@@ -318,6 +319,12 @@ nav a:hover{
 	width: 230px;
 	height: 40px;
 	border-radius: 60px;
+}
+
+.cta-bis.active {
+    background-color: #1D6154;
+    color: white;
+    cursor: pointer;
 }
 
 /** Filtres **/

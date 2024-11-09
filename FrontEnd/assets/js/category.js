@@ -1,18 +1,28 @@
-function recupCategory(){
-    fetch("http://localhost:5678/api/categories")
+import { allProject } from "./works.js";
+import { addWorks } from "./works.js";
+
+
+/** Récupération des données API des catégories **/
+export function recupCategory(linkApi, callback){
+    fetch(linkApi)
     .then(reponse => reponse.json())
     .then(categories =>{
         console.log(categories);
-        addFilter(categories)
+        addFilter(categories);
+        callback(categories);
     })
-    .catch(error => console.error('Erreur lors de la récupération des projets:', error));
+    .catch(error => console.error("Erreur lors de la récupération des projets:", error));
 }
 
+
+/** Ajout des filtres dans la page index **/
 function addFilter(categories){
     categories.unshift({id : 4, name : "Tous"});
     console.log(categories);
 
     const filters = document.querySelector(".filters");
+
+    filters.innerHTML = '';
 
     categories.forEach(buttonFilter => {
         const filterContainer = document.createElement("div");
@@ -29,48 +39,41 @@ function addFilter(categories){
             console.log("Vous avez appuyé sur un bouton filtre");
             showFilter(filterContainer);
             filterUpdate(filterContainer);
-        });        
+        }); 
+        
+        const defaultFilter = filters.querySelector(".filterContainer");
+        defaultFilter.classList.add("active");
+        showFilter(defaultFilter);
     });
 }
 
+
+/** Affiche les projets en fonction de la catégorie sélectionnée **/
 function showFilter(clickedElement){
-    clickedElement.classList.toggle('active');
     const selectedCategory = clickedElement.querySelector('.filterTitle').textContent;
-
+    
     const gallery = document.querySelector(".gallery");
-    gallery.innerHTML = '';  
+    gallery.innerHTML = ''; 
     
-    fetch("http://localhost:5678/api/works")
-    .then(response => response.json())
-    .then(projects => {
-        // Filtrer les projets en fonction de la catégorie sélectionnée
-        let filteredProjects;
+    let filteredProjects;
 
-        if (selectedCategory === "Tous") {
-            // Si le bouton "Tous" est sélectionné, on affiche tous les projets
-            filteredProjects = projects;
-        } else {
-            // Sinon, on filtre par catégorie
-            filteredProjects = projects.filter(project => project.category.name === selectedCategory);
-        }
-
-        // Ensuite, on réaffiche les projets filtrés
-        addWorks(filteredProjects);
-    })
-    .catch(error => console.error('Erreur lors de la récupération des projets:', error));
-    
+    if (selectedCategory === "Tous") {
+        filteredProjects = allProject;
+    } else {
+        filteredProjects = allProject.filter(project => project.category.name === selectedCategory);
+    }
+    addWorks(filteredProjects);
 }
 
+/** Met à jour le filtre actif en appliquant la classe "active" au filtre sélectionné **/
 function filterUpdate(clickedElement){
     const filter = document.querySelectorAll(".filterContainer");
 
-    //Supprimer la classe active de tous les filtres
     filter.forEach(filterSelect =>{
         filterSelect.classList.remove("active");
     });
 
-    //Ajouter la classe active sur le filtre actif
     clickedElement.classList.add("active");
 }
 
-recupCategory();
+recupCategory("http://localhost:5678/api/categories", addFilter);

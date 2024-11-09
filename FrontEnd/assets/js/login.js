@@ -1,3 +1,4 @@
+/** Empêche l'envoi par défaut et déclenche la fonction recupLogin avec les valeurs de l'email et du mot de passe **/
 let form = document.querySelector("form");
 form.addEventListener('submit', function(event){
     event.preventDefault(); // Empêche l’envoi quel que soit le moyen de soumission
@@ -7,6 +8,7 @@ form.addEventListener('submit', function(event){
     recupLogin(email,password)
 })
 
+/** Gère la connexion de l'utilisateur **/
 function recupLogin(email, password){
     fetch('http://localhost:5678/api/users/login', {
         method: 'POST',
@@ -28,8 +30,8 @@ function recupLogin(email, password){
         console.log(data); // Afficher la réponse pour voir la structure
         if (data.token) {
             localStorage.setItem('token', data.token);
-            localStorage.setItem('modeEdition', 'true'); // Mode édition activé
-            window.location.href = 'index.html'; // Redirection en cas de succès
+            localStorage.setItem('modeEdition', 'true'); 
+            window.location.href = 'index.html'; 
         } 
     })
     .catch(error => {
