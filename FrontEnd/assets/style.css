@@ -233,6 +233,7 @@ nav a:hover{
 	height: 35px;
 	border-radius: 60px;
 }
+
 /** Modal 2 **/
 .icon{
 	display: flex;
@@ -325,6 +326,12 @@ nav a:hover{
     background-color: #1D6154;
     color: white;
     cursor: pointer;
+}
+
+.errorMessage{
+	text-align: center;
+	padding-top: 20px;
+	color: #B1663C;
 }
 
 /** Filtres **/

@@ -264,20 +264,21 @@ async function sendForm(){
             });
 
             if (response.ok) {
-                // Fermer la modale et actualiser les données si nécessaire
                 document.getElementById('modal-form').style.display = 'none';
                 const newProject = await response.json();
                 addProjectToIndex(newProject);
 
-                // Réinitialiser chaque champ manuellement
                 document.getElementById("photo-title").value = '';
                 document.getElementById("photo-category").value = '';
                 fileInput.value = '';
 
-                // Restaurer le placeholder à son état initial
                 uploadPlaceholder.innerHTML = defaultPlaceholderContent;
             } else {
-                alert("Erreur lors de l'ajout du projet.");
+                const title = document.getElementById("title-modal");
+                const errorMessage = document.createElement("p");
+                errorMessage.classList.add("errorMessage");
+                errorMessage.textContent = "Veuillez remplir tous les champs.";
+                title.insertAdjacentElement("afterend", errorMessage);
             }
         } catch (error) {
             console.error("Erreur:", error);
