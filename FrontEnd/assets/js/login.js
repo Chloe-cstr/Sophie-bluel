@@ -1,7 +1,7 @@
 /** Empêche l'envoi par défaut et déclenche la fonction recupLogin avec les valeurs de l'email et du mot de passe **/
 let form = document.querySelector("form");
 form.addEventListener('submit', function(event){
-    event.preventDefault(); // Empêche l’envoi quel que soit le moyen de soumission
+    event.preventDefault(); 
     console.log("Formulaire soumis");
     const email = document.querySelector('input[name="email"]').value;
     const password = document.querySelector('input[name="password"]').value;
@@ -27,7 +27,7 @@ function recupLogin(email, password){
         return reponse.json();
     })
     .then(data => {
-        console.log(data); // Afficher la réponse pour voir la structure
+        console.log(data); 
         if (data.token) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('modeEdition', 'true'); 

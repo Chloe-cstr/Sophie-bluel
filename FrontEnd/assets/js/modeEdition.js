@@ -160,8 +160,8 @@ async function deleteProject(deleteIcon, projectId, project) {
 
             if (response.ok) {
                 console.log("Projet supprimé avec succès");
-                project.remove(); // Supprime le projet de la modale
-                removeProjectFromIndex(projectId); // Supprime le projet de la page index
+                project.remove(); 
+                removeProjectFromIndex(projectId); 
             } else if (response.status === 401) {
                 console.error("Erreur : non autorisé. Vérifiez le jeton.");
             } else {
@@ -175,12 +175,11 @@ async function deleteProject(deleteIcon, projectId, project) {
 
 /** Suppression des projets dans la page index **/
 function removeProjectFromIndex(projectId) {
-    // Utilise l'ID dynamique défini dans addWorks
     const project = document.querySelector(`#project-${projectId}`);
     console.log("Projet ciblé pour suppression :", project);
 
     if (project) {
-        project.remove(); // Supprime le projet de la galerie
+        project.remove(); 
         console.log(`Projet avec ID ${projectId} supprimé de la page index`);
     } else {
         console.error(`Projet avec ID ${projectId} introuvable dans la galerie.`);
@@ -192,11 +191,9 @@ const defaultPlaceholderContent = uploadPlaceholder.innerHTML;
 
 /** Ajout de la photo **/
 function addPhoto(){
-    const uploadPlaceholder = document.querySelector('.upload-placeholder');
     const fileInput = document.getElementById('fileInput');
 
     uploadPlaceholder.addEventListener('click', () => {
-        // Déclencher le clic sur le champ de fichier
         fileInput.click();
     });
     fileInput.addEventListener('change', (event) => {
@@ -245,13 +242,11 @@ async function sendForm(){
         const title = document.getElementById("photo-title").value;
         const category = document.getElementById("photo-category").value;
 
-        // Créer un objet FormData pour l'envoi
         const formData = new FormData();
         formData.append('image', fileInput.files[0]);
         formData.append('title', title);
         formData.append('category', category);
 
-        // Envoyer la requête POST
         try {
             const token = localStorage.getItem("token");
             const response = await fetch('http://localhost:5678/api/works', {
@@ -266,7 +261,10 @@ async function sendForm(){
             if (response.ok) {
                 document.getElementById('modal-form').style.display = 'none';
                 const newProject = await response.json();
+                
                 addProjectToIndex(newProject);
+
+                addProjectToModal(newProject);
 
                 document.getElementById("photo-title").value = '';
                 document.getElementById("photo-category").value = '';
@@ -297,13 +295,35 @@ function addProjectToIndex(newProject){
     const imageProject = document.createElement("img");
     imageProject.src = newProject.imageUrl;
     imageProject.alt = newProject.title;
-    project.appendChild(imageProject); //Ajout de l'image à la balise figure
+    project.appendChild(imageProject); 
         
     const titleProject = document.createElement("figcaption");
     titleProject.textContent = newProject.title;
-    project.appendChild(titleProject); //Ajout du titre à la balise figure
+    project.appendChild(titleProject); 
 
-    gallery.appendChild(project); //Ajout de la balise figure à la div .gallery
+    gallery.appendChild(project); 
+}
+
+/** Ajout du nouveau projet dans la modal 1 **/
+function addProjectToModal(work) {
+    const galleryProject = document.querySelector(".gallery-project");
+
+    const project = document.createElement("figure");
+    project.classList.add("figureModal");
+    project.setAttribute("data-id", work.id);
+
+    const imgProject = document.createElement("img");
+    imgProject.classList.add("imgModal");
+    imgProject.src = work.imageUrl;
+    imgProject.alt = work.title;
+    project.appendChild(imgProject);
+
+    const deleteIcon = document.createElement("i");
+    deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
+    project.appendChild(deleteIcon);
+
+    deleteProject(deleteIcon, work.id, project);
+    galleryProject.appendChild(project);
 }
 
 /** Active le bouton de validation **/

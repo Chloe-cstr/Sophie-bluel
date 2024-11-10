@@ -5,7 +5,6 @@ export function recupWorks(linkApi, callback){
     fetch(linkApi)
     .then(reponse => reponse.json())
     .then(projects =>{
-        console.log(projects);
         allProject = projects;
         console.log(allProject);
         callback(projects);

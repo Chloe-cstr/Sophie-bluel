@@ -20,6 +20,10 @@
     margin-bottom: 20px;
 }
 
+.error p{
+    margin-bottom: 18px; 
+}
+
 form{
     display: flex;
     flex-direction: column;

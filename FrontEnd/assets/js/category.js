@@ -8,7 +8,6 @@ export function recupCategory(linkApi, callback){
     .then(reponse => reponse.json())
     .then(categories =>{
         console.log(categories);
-        addFilter(categories);
         callback(categories);
     })
     .catch(error => console.error("Erreur lors de la récupération des projets:", error));
@@ -21,8 +20,6 @@ function addFilter(categories){
     console.log(categories);
 
     const filters = document.querySelector(".filters");
-
-    filters.innerHTML = '';
 
     categories.forEach(buttonFilter => {
         const filterContainer = document.createElement("div");
