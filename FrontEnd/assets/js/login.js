@@ -29,8 +29,8 @@ function recupLogin(email, password){
     .then(data => {
         console.log(data); 
         if (data.token) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('modeEdition', 'true'); 
+            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem('modeEdition', 'true'); 
             window.location.href = 'index.html'; 
         } 
     })

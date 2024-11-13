@@ -1,6 +1,6 @@
 export let allProject = [];
 
-/** Récupération donné API des projets **/
+/** Récupération des projets à partir d'une API **/
 export function recupWorks(linkApi, callback){
     fetch(linkApi)
     .then(reponse => reponse.json())

@@ -13,7 +13,6 @@ export function recupCategory(linkApi, callback){
     .catch(error => console.error("Erreur lors de la récupération des projets:", error));
 }
 
-
 /** Ajout des filtres dans la page index **/
 function addFilter(categories){
     categories.unshift({id : 4, name : "Tous"});

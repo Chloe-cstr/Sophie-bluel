@@ -4,7 +4,7 @@ import { recupCategory } from "./category.js";
 /** Active le mode eddition **/
 function addModeEdition(){
     document.addEventListener('DOMContentLoaded', ()=>{
-        const modeEdition = localStorage.getItem('modeEdition');
+        const modeEdition = sessionStorage.getItem('modeEdition');
         if (modeEdition === "true"){
             console.log("mode édition activé");
 
@@ -29,7 +29,7 @@ function addModeEdition(){
             logout.innerText = "logout";
             logout.addEventListener('click', () => {
                 // Déconnexion et retour au mode normal
-                localStorage.removeItem("modeEdition");
+                sessionStorage.removeItem("modeEdition");
                 location.reload();
             });
             
@@ -67,6 +67,25 @@ function addModeEdition(){
     })
 }
 
+const uploadPlaceholder = document.querySelector('.upload-placeholder');
+const defaultPlaceholderContent = uploadPlaceholder.innerHTML;
+
+/** Réinitialisation du formulaire **/
+function resetForm() {
+    document.getElementById("photo-title").value = '';
+    document.getElementById("photo-category").value = '';
+    document.getElementById("fileInput").value = '';
+    uploadPlaceholder.innerHTML = defaultPlaceholderContent;
+
+    const buttonValid = document.querySelector(".cta-bis");
+    buttonValid.classList.remove('active');
+
+    const errorMessage = document.querySelector(".errorMessage");
+    if (errorMessage) {
+        errorMessage.remove();
+    }
+}
+
 /** Ouverture de la modale **/
 function openModal(modifText){
     const modal = document.querySelector(".modal");
@@ -82,12 +101,14 @@ function closeModal(){
     iconClose.forEach((icon, index)=>{
         icon.addEventListener('click', ()=>{
             modal[index].style.display = "none";
+            resetForm();
         })
     })
     window.addEventListener("click", (event) => {
         modal.forEach(modal => {
             if (event.target === modal) {
                 modal.style.display = "none";
+                resetForm();
             }
         });
     });
@@ -95,6 +116,7 @@ function closeModal(){
 
 /** Aller vers la modale 2 **/
 function goModalForm(){
+    const category = document.getElementById("photo-category").value;
     const buttonCta = document.querySelector(".cta");
     const modalGallery = document.getElementById("modal-gallery");
     const modalForm = document.getElementById("modal-form");
@@ -143,7 +165,7 @@ function addGallery(projects){
 /** Suppression des projets dans la modale 1 **/
 async function deleteProject(deleteIcon, projectId, project) {
     deleteIcon.addEventListener("click", async () => {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
 
         if (!token) {
             console.error("Erreur : aucun jeton trouvé. Veuillez vous connecter.");
@@ -186,15 +208,12 @@ function removeProjectFromIndex(projectId) {
     }
 }
 
-const uploadPlaceholder = document.querySelector('.upload-placeholder');
-const defaultPlaceholderContent = uploadPlaceholder.innerHTML;
-
 /** Ajout de la photo **/
 function addPhoto(){
     const fileInput = document.getElementById('fileInput');
 
     uploadPlaceholder.addEventListener('click', () => {
-        fileInput.click();
+        fileInput.click(); //Ouvre le sélecteur de fichier 
     });
     fileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
@@ -219,6 +238,12 @@ function addPhoto(){
 function loadCategories(categories){
     const categorySelect = document.getElementById('photo-category');
 
+    // Créer et ajouter une option vide
+    const emptyOption = document.createElement('option');
+    emptyOption.value = "";
+    emptyOption.textContent = "-- Choisissez une catégorie --";
+    categorySelect.appendChild(emptyOption);
+
     categories.forEach(category =>{
         const option = document.createElement('option');
         option.value = category.id;
@@ -242,13 +267,24 @@ async function sendForm(){
         const title = document.getElementById("photo-title").value;
         const category = document.getElementById("photo-category").value;
 
+        if (!fileInput || !title || !category) {
+            const titleElement = document.getElementById("title-modal");
+            if (!document.querySelector(".errorMessage")) {
+                const errorMessage = document.createElement("p");
+                errorMessage.classList.add("errorMessage");
+                errorMessage.textContent = "Veuillez remplir tous les champs.";
+                titleElement.insertAdjacentElement("afterend", errorMessage);
+            }
+            return; 
+        }
+
         const formData = new FormData();
         formData.append('image', fileInput.files[0]);
         formData.append('title', title);
         formData.append('category', category);
 
         try {
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
             const response = await fetch('http://localhost:5678/api/works', {
                 method: 'POST',
                 body: formData,
@@ -266,17 +302,15 @@ async function sendForm(){
 
                 addProjectToModal(newProject);
 
-                document.getElementById("photo-title").value = '';
-                document.getElementById("photo-category").value = '';
-                fileInput.value = '';
-
-                uploadPlaceholder.innerHTML = defaultPlaceholderContent;
+                resetForm();
             } else {
                 const title = document.getElementById("title-modal");
-                const errorMessage = document.createElement("p");
-                errorMessage.classList.add("errorMessage");
-                errorMessage.textContent = "Veuillez remplir tous les champs.";
-                title.insertAdjacentElement("afterend", errorMessage);
+                if (!document.querySelector(".errorMessage")) {
+                    const errorMessage = document.createElement("p");
+                    errorMessage.classList.add("errorMessage");
+                    errorMessage.textContent = "Veuillez remplir tous les champs.";
+                    title.insertAdjacentElement("afterend", errorMessage);
+                }
             }
         } catch (error) {
             console.error("Erreur:", error);
@@ -284,7 +318,6 @@ async function sendForm(){
         }
     })
 }
-
 
 /** Ajout du nouveau projet dans la page index **/
 function addProjectToIndex(newProject){
@@ -333,7 +366,6 @@ function checkFormCompletion() {
     const category = document.getElementById('photo-category').value;
     const buttonValid = document.querySelector(".cta-bis");
 
-    // Vérifier que tous les champs sont remplis
     if (fileInput && title && category) {
         buttonValid.classList.add('active');
     } else {
